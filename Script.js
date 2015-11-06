@@ -31,7 +31,7 @@ jQuery(document).ready(function($) {
 
     Clock.prototype.date = null;
 
-    function Clock($context) {
+    function Clock($context, tz) {
       this.$context = $context;
       this.animate = bind(this.animate, this);
       this.ctx = this.$context.get(0).getContext("2d");
@@ -40,6 +40,7 @@ jQuery(document).ready(function($) {
       this.centerX = this.canvasWidth / 2;
       this.centerY = this.canvasHeight / 2;
       this.animate();
+      this.timezone = tz;
       return;
     }
 
@@ -47,7 +48,9 @@ jQuery(document).ready(function($) {
       var radians, time;
       this.$context[0].height = this.canvasHeight;
       this.$context[0].width = this.canvasWidth;
-      time = this.getTimeObj();
+      //mata in fler parametrar
+      time = this.getTimeObj(this.timezone);
+
       radians = this.getRadians(time);
       this.drawCircle(70, 10, radians.milliRad, this.milliDirection);
       this.drawCircle(88, 10, radians.secondRad, false);
@@ -73,8 +76,11 @@ jQuery(document).ready(function($) {
       this.ctx.closePath();
       return this.ctx.restore();
     };
+    //Här hämtas tiden
+    //new york gmt-5
+    // tokyo gmt+9
 
-    Clock.prototype.getTimeObj = function() {
+    Clock.prototype.getTimeObj = function(tz) {
       var date, time;
       date = new Date();
       time = {
@@ -83,12 +89,37 @@ jQuery(document).ready(function($) {
         minutes: date.getMinutes(),
         hours: date.getHours()
       };
-      return time;
+
+      timeNewYork = {
+        milliseconds: date.getMilliseconds(),
+        seconds: date.getSeconds(),
+        minutes: date.getMinutes(),
+        hours: date.getHours() - 5
+      };
+
+      timeTokyo = {
+        milliseconds: date.getMilliseconds(),
+        seconds: date.getSeconds(),
+        minutes: date.getMinutes(),
+        hours: date.getHours() + 9
+      };
+
+      switch(tz){
+          case 2:
+          return timeNewYork;
+
+          case 3:
+          return timeTokyo;
+
+          case 1:
+          default:
+          return time;
+      }      
+      
     };
 
     Clock.prototype.getRadians = function(time) {
-        //lagt till sekund variabler
-      var hours, hoursDegrees, hoursRadians, milliDegrees, milliRadians, secondDegrees, secondRadians, minutesDegrees, minutesRadians, ref;
+        var hours, hoursDegrees, hoursRadians, milliDegrees, milliRadians, secondDegrees, secondRadians, minutesDegrees, minutesRadians, ref;
       milliDegrees = this.map(time.milliseconds, 0, 1000, 0, 360);
       milliRadians = (milliDegrees * Math.PI) / 180;
       secondDegrees = this.map(time.seconds, 0, 60, 0, 360);
@@ -141,8 +172,13 @@ jQuery(document).ready(function($) {
   })();
 
   $clock = $("#clock");
+  clock = new Clock($clock, 1);
 
-  clock = new Clock($clock);
+  $clock = $("#clock2");
+  clock = new Clock($clock, 2);
+
+  $clock = $("#clock3");
+  clock = new Clock($clock, 3);
 
   (function() {
     var browserRaf, canceled, i, len, ref, targetTime, vendor, w;
