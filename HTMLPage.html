@@ -13,7 +13,7 @@
     <body>
         <ul class="navbar">
             <li class="navbar-li" id="weather"><a href="#">Väder</a></li>
-            <li class="navbar-li" id="clock"><a href="#">Klocka</a></li>
+            <li class="navbar-li" id="clocklink"><a href="#">Klocka</a></li>
             <li class="navbar-li" id="login"><a href="#">Logga in</a></li>
             <li class="navbar-li" id="table"><a href="#">Datatable</a></li>
         </ul>
@@ -28,12 +28,16 @@
 
             <ul class="mobile-navbar">
                 <li class="mobile-navbar-li" id="weather" style="background-color: #ffe01a;"><a href="#">Väder</a></li>
-                <li class="mobile-navbar-li" id="clock" style="background-color: #ef3e42;"><a href="#">Klocka</a></li>
+                <li class="mobile-navbar-li" id="clocklink" style="background-color: #ef3e42;"><a href="#">Klocka</a></li>
                 <li class="mobile-navbar-li" id="login" style="background-color: #007ac2;"><a href="#">Logga in</a></li>
                 <li class="mobile-navbar-li" id="table" style="background-color: #d0ad67;"><a href="#">Datatable</a></li>
             </ul>
-
         </div>
+        </br>
+        <div id="time">
+            <canvas id="clock"></canvas>
+            <h1 id="city-stockholm">Stockholm</h1>
+        </div>       
         <script src="Script.js"></script>
     </body>
 </html>
